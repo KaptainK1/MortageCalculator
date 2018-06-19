@@ -1,9 +1,9 @@
-import model.Mortgage;
+import model.ConventionalMortgage;
 
 public class Main {
 
     public static void main(String args[]){
-        Mortgage mortgage = new Mortgage(4.625d,172000,360,6880,730);
+        ConventionalMortgage mortgage = new ConventionalMortgage(4.625d,172000,360,730,6880);
         mortgage.calculateAmortization();
         mortgage.yearPrinciple(5);
     }

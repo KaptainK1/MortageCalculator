@@ -1,6 +1,6 @@
 package model;
 
-public class Mortgage {
+public abstract class Mortgage {
 
     private static final int MONTHS=12;
 
@@ -13,69 +13,64 @@ public class Mortgage {
     private double pmi;
 
     public Mortgage(double interestRate, int purchasePrice, int termMonths, int creditScore){
+        if(downPayment >= purchasePrice){
+            throw new IllegalArgumentException("Congrats you don't need a loan with that down payment!");
+        }
+        if (interestRate > 1.0 || interestRate < 0.01){
+            throw new IllegalArgumentException("Interest rate can't be greater than 100 or less than .1 percent");
+        }
+        if (termMonths > 360 || termMonths < 12){
+            throw new IllegalArgumentException("Term months can't be greater than 30 years (360) or less than 1 year (12)");
+        }
+        if (purchasePrice < 10000){
+            throw new IllegalArgumentException("Purchase price must be greater than $10,000");
+        }
+        if (creditScore < 300 || creditScore > 900){
+            throw new IllegalArgumentException("Credit Score must be greater than 300 and less than 900");
+        }
         this.downPayment=0;
         this.interestRate=interestRate;
         this.termMonths=termMonths;
         this.purchasePrice=purchasePrice;
         this.creditScore=creditScore;
+        monthlyPayments = new double[getTermMonths()];
     }
 
     public Mortgage(double interestRate, int purchasePrice, int termMonths, int downPayment, int creditScore){
+        if(downPayment >= purchasePrice){
+            throw new IllegalArgumentException("Congrats you don't need a loan with that down payment!");
+        }
+        if (interestRate > 1.0 || interestRate < 0.01){
+            throw new IllegalArgumentException("Interest rate can't be greater than 100 or less than .1 percent");
+        }
+        if (termMonths > 360 || termMonths < 12){
+            throw new IllegalArgumentException("Term months can't be greater than 30 years (360) or less than 1 year (12)");
+        }
+        if (purchasePrice < 10000){
+            throw new IllegalArgumentException("Purchase price must be greater than $10,000");
+        }
+        if (creditScore < 300 || creditScore > 900){
+            throw new IllegalArgumentException("Credit Score must be greater than 300 and less than 900");
+        }
         this.downPayment=downPayment;
         this.interestRate=interestRate;
         this.termMonths=termMonths;
         this.purchasePrice=purchasePrice;
         this.creditScore=creditScore;
+        monthlyPayments = new double[getTermMonths()];
     }
-//Method for calculating the total monthly cost of a loans p and i
-    public double calculatePI(){
-        double monthlyPayment;
-        double topEquation;
-        double bottomEquation;
-        //convert interest rate into a percentage
-        double r = (getInterestRate()/MONTHS)/100;
-        //Equation is M= P(r + 1)^n / ((1+r)^n - 1)
-        //top equation represents (r+1)^n
-        //bottom equation represents ((1+r)^n - 1)
-        topEquation =((r)*(Math.pow(1+r,getTermMonths())));
-        bottomEquation= ((Math.pow(1+r,getTermMonths())-1));
-        monthlyPayment=getPurchasePrice()*(topEquation/bottomEquation);
+    //Method for calculating the total monthly cost of a loans p and i
+    public abstract double calculatePI();
+    //method for calculating the Amortization for the loan
+    //for each month calculate the interest and principle paid, then the principle is added into the array
+    public abstract void calculateAmortization();
 
-        return monthlyPayment;
+    //need to understand how refinancing works
+    public void refinance(){
+
     }
-
-//method for calculating the Amortization for the loan
-//for each month calculate the interest and principle paid, then the principle is added into the array
-    public void calculateAmortization() {
-        double i;
-        //set beginning principal to the down payment on the loan
-        double p = getPurchasePrice() - getDownPayment();
-        //convert interest rate into a percentage
-        double r = (getInterestRate() / MONTHS) / 100;
-        //run the calculatePI method to find the monthly payment
-        double payment = calculatePI();
-        //var to hold the total principal paid
-        double totalP;
-        //array to hold the principal paid for each month
-        monthlyPayments = new double[termMonths];
-        //call method to add PMI
-
-            for (int j = 0; j < monthlyPayments.length; j++) {
-                //set the interest by multiplying the principal by the rate
-                i = p * r;
-                //set the principal equal to itself minus the payment minus the interest
-                p = p - (payment - i);
-                totalP = (getPurchasePrice() - p);
-                monthlyPayments[j] = totalP;
-            }
-            //add the pmi amount to each month that pmi is needed
-            //run the print schedule method that prints out the array
-            addPMI();
-            printSchedule();
-        }
-
     //method for finding when the PMI will end if applicable
-    private int returnPMIMonths(){
+    public int returnPMIMonths(){
         double totalPaidAmount = getDownPayment();
         int PMIMonth;
         double PMI = getPurchasePrice()*.20d;
@@ -92,7 +87,7 @@ public class Mortgage {
 
     //method to add pmi to each month
     //calls method return pmi which will determine the amount of months that will have pmi
-    private void addPMI(){
+    public void addPMI(){
         int months = returnPMIMonths();
         for (int i = 0; i < months; i++) {
             monthlyPayments[i]+=calculatePMI();
@@ -210,7 +205,7 @@ public class Mortgage {
         }
 
         pmiPercent=pmiPercent/100;
-        setPmi((pmiPercent*getPurchasePrice()/MONTHS));
+        setPmi((pmiPercent*getPurchasePrice()/12));
         return getPmi();
     }
 
