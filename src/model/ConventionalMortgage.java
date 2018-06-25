@@ -4,8 +4,8 @@ public class ConventionalMortgage extends Mortgage{
 
     private static final int MONTHS=12;
 
-    public ConventionalMortgage(double interestRate, int purchasePrice, int termMonths, int creditScore, int downPayment){
-        super(interestRate,purchasePrice,termMonths,creditScore, downPayment);
+    public ConventionalMortgage(double interestRate, int purchasePrice, int termMonths, int downPayment, int creditScore){
+        super(interestRate,purchasePrice,termMonths,downPayment,creditScore);
     }
     //method for calculating the Amortization for the loan
     //for each month calculate the interest and principle paid, then the principle is added into the array

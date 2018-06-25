@@ -45,7 +45,7 @@ public abstract class Mortgage {
         if (purchasePrice < 10000){
             throw new IllegalArgumentException("Purchase price must be greater than $10,000");
         }
-        if (creditScore < 300 || creditScore > 900){
+        if (creditScore > 900 || creditScore < 300){
             throw new IllegalArgumentException("Credit Score must be greater than 300 and less than 900");
         }
         this.downPayment=downPayment;
@@ -92,6 +92,20 @@ public abstract class Mortgage {
             }
         }
         return 0;
+    }
+
+    //method to calculate the monthly p/i for multiple mortgages
+    public static double totalMonthlyPayments(Mortgage[] mortgage){
+        double total =0;
+
+        for (Mortgage currentMortgage : mortgage) {
+            System.out.println(currentMortgage.calculatePI());
+            total+=currentMortgage.calculatePI();
+            if (currentMortgage instanceof ConventionalMortgage || currentMortgage instanceof FHAMortgage || currentMortgage instanceof VAMortgage){
+                total+=currentMortgage.calculatePMI();
+            }
+        }
+        return total;
     }
 
     //method to add pmi to each month

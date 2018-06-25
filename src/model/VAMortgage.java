@@ -2,8 +2,8 @@ package model;
 
 public class VAMortgage extends Mortgage{
 
-    public VAMortgage(double interestRate, int purchasePrice, int termMonths, int creditScore, int downPayment){
-        super(interestRate,purchasePrice,termMonths,creditScore, downPayment);
+    public VAMortgage(double interestRate, int purchasePrice, int termMonths, int downPayment, int creditScore){
+        super(interestRate,purchasePrice,termMonths,downPayment,creditScore);
     }
 
     @Override

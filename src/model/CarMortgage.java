@@ -5,8 +5,8 @@ public class CarMortgage extends Mortgage{
     private static final int MONTHS = 12;
     private double salesTax;
 
-    public CarMortgage(double interestRate, int purchasePrice, int termMonths, int creditScore, int downPayment, double salesTax){
-        super(interestRate,purchasePrice,termMonths,creditScore, downPayment);
+    public CarMortgage(double interestRate, int purchasePrice, int termMonths, int downPayment, int creditScore, double salesTax){
+        super(interestRate,purchasePrice,termMonths,downPayment,creditScore);
         this.salesTax=salesTax;
     }
 
