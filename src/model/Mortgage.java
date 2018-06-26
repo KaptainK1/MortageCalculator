@@ -11,27 +11,6 @@ public abstract class Mortgage {
     private double monthlyPayments[];
     private double pmi;
 
-    public Mortgage(double interestRate, int purchasePrice, int termMonths, int creditScore){
-        if (interestRate > 100 || interestRate < 0.01){
-            throw new IllegalArgumentException("Interest rate can't be greater than 100% or less than .1%");
-        }
-        if (termMonths > 360 || termMonths < 48){
-            throw new IllegalArgumentException("Term months can't be greater than 30 years (360) or less than 4 years (48)");
-        }
-        if (purchasePrice < 10000){
-            throw new IllegalArgumentException("Purchase price must be greater than $10,000");
-        }
-        if (creditScore < 300 || creditScore > 900){
-            throw new IllegalArgumentException("Credit Score must be greater than 300 and less than 900");
-        }
-        this.downPayment=0;
-        this.interestRate=interestRate;
-        this.termMonths=termMonths;
-        this.purchasePrice=purchasePrice;
-        this.creditScore=creditScore;
-        monthlyPayments = new double[getTermMonths()];
-    }
-
     public Mortgage(double interestRate, int purchasePrice, int termMonths, int downPayment, int creditScore){
         if(downPayment >= purchasePrice){
             throw new IllegalArgumentException("Congrats you don't need a loan with that down payment!");
@@ -311,4 +290,5 @@ public abstract class Mortgage {
     public void setCreditScore(int creditScore) {
         this.creditScore = creditScore;
     }
+
 }

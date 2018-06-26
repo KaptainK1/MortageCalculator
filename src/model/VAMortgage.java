@@ -2,8 +2,10 @@ package model;
 
 public class VAMortgage extends Mortgage{
 
-    public VAMortgage(double interestRate, int purchasePrice, int termMonths, int downPayment, int creditScore){
+    private double escrow;
+    public VAMortgage(double interestRate, int purchasePrice, int termMonths, int downPayment, int creditScore, double escrow){
         super(interestRate,purchasePrice,termMonths,downPayment,creditScore);
+        this.escrow=escrow;
     }
 
     @Override
@@ -14,5 +16,13 @@ public class VAMortgage extends Mortgage{
     @Override
     public void calculateAmortization() {
 
+    }
+
+    public double getEscrow() {
+        return escrow;
+    }
+
+    public void setEscrow(double escrow) {
+        this.escrow = escrow;
     }
 }

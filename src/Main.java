@@ -5,7 +5,7 @@ import model.Mortgage;
 public class Main {
 
     public static void main(String args[]){
-        ConventionalMortgage mortgage = new ConventionalMortgage(4.625d,172000,360,6880,700);
+        ConventionalMortgage mortgage = new ConventionalMortgage(4.625d,172000,360,6880,700, 248.35);
         mortgage.calculateAmortization();
         mortgage.yearPrinciple(5);
         CarMortgage carMortgage = new CarMortgage(1.99,12000, 60,2000, 700, .05);
