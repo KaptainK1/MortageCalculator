@@ -111,6 +111,24 @@ public class Main  extends Application {
         field.addEventFilter(MouseEvent.MOUSE_CLICKED,eventHandler);
     }
 
+    public void setValues(){
+
+
+
+    }
+
+    public void submit(Button button){
+        button.setOnMouseClicked((new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                System.out.println("Hello World");
+//                if (checkValues()) {
+//                    setTermMonths(Integer.parseInt());
+//                }
+
+            }
+        }));
+    }
+
     public double getInterestRate() {
         return interestRate;
     }
