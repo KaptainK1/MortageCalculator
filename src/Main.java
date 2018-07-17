@@ -1,12 +1,16 @@
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HorizontalDirection;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.*;
 import javafx.*;
@@ -22,55 +26,85 @@ public class Main  extends Application {
     private double escrow;
     private double interestRate;
 
+    Stage window;
+    Scene mainScene;
+    Button submitButton;
+    TextField textPurchasePrice;
+    TextField textTermMonths;
+    TextField textDownPayment;
+    TextField textEscrow;
+    TextField textInterestRate;
+    TextField textCreditScore;
+    AlertBox alertBox = new AlertBox();
+    ListView<String> list = new ListView<String>();
+
     public static void main(String args[]){
         //create the UI
         launch(args);
-
-        String userInput;
-        String array[];
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter in the format InterestRate, PurchasePrice, Term, DownPayment, CreditScore, Escrow");
-        userInput=scanner.nextLine();
-        array=userInput.split(",");
-        // throw an exception when the array length doesn't equal 5
-        if (array.length != 6) {
-            throw new IllegalArgumentException("Not enough parameters or commas entered");
-        }
-
-        for (int i = 0; i < array.length; i++) {
-            System.out.println(array[i]);
-        }
-
-//        ConventionalMortgage mortgage = new ConventionalMortgage(4.625d,172000,360,6880,700, 248.35);
-        ConventionalMortgage mortgage = new ConventionalMortgage(Double.valueOf(array[0]), Integer.valueOf(array[1]), Integer.valueOf(array[2]),
-                                                                    Integer.valueOf(array[3]), Integer.valueOf(array[4]), Double.valueOf(array[5]));
-        mortgage.calculateAmortization();
-        mortgage.yearPrinciple(5);
-        CarMortgage carMortgage = new CarMortgage(1.99,12000, 60,2000, 700, .05);
-
-        Mortgage mortgages[] = new Mortgage[2];
-        mortgages[0]=mortgage;
-        mortgages[1]=carMortgage;
-        System.out.println();
-        System.out.println(Mortgage.totalMonthlyPayments(mortgages));
+//        String userInput;
+//        String array[];
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("Enter in the format InterestRate, PurchasePrice, Term, DownPayment, CreditScore, Escrow");
+//        userInput=scanner.nextLine();
+//        array=userInput.split(",");
+//        // throw an exception when the array length doesn't equal 5
+//        if (array.length != 6) {
+//            throw new IllegalArgumentException("Not enough parameters or commas entered");
+//        }
+//
+//        for (int i = 0; i < array.length; i++) {
+//            System.out.println(array[i]);
+//        }
+//
+////        ConventionalMortgage mortgage = new ConventionalMortgage(4.625d,172000,360,6880,700, 248.35);
+//        ConventionalMortgage mortgage = new ConventionalMortgage(Double.valueOf(array[0]), Integer.valueOf(array[1]), Integer.valueOf(array[2]),
+//                                                                    Integer.valueOf(array[3]), Integer.valueOf(array[4]), Double.valueOf(array[5]));
+//        mortgage.calculateAmortization();
+//        mortgage.yearPrinciple(5);
+//        CarMortgage carMortgage = new CarMortgage(1.99,12000, 60,2000, 700);
+//
+//        Mortgage mortgages[] = new Mortgage[2];
+//        mortgages[0]=mortgage;
+//        mortgages[1]=carMortgage;
+//        System.out.println();
+//        System.out.println(Mortgage.totalMonthlyPayments(mortgages));
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        window=primaryStage;
+        window.setTitle("Mortgage Calculator");
+        window.setMinHeight(300);
+        window.setMinWidth(300);
 
-        primaryStage.setTitle("Mortgage Calculator");
-        primaryStage.setMinHeight(300);
-        primaryStage.setMinWidth(300);
-
-        Button submitButton = new Button();
+        //create the button
+        submitButton = new Button();
         submitButton.setText("Submit");
+        //run the submit function when the button is clicked
+        submit(submitButton);
+
+        //create labels
+        Label labelPurchasePrice = new Label("Enter Purchase Price: ");
+        Label labelTermMonths = new Label("Enter Term Months: ");
+        Label labelDownPayment = new Label("Enter Down Payment: ");
+        Label labelCreditScore = new Label("Enter Credit Score: ");
+        Label labelEscrow = new Label("Enter Escrow: ");
+        Label labelInterestRate = new Label("Enter Interest Rate: ");
+        Label labelLoanType = new Label("Select the Loan Type");
+
+        //create list for loan objects
+        ObservableList<String> items =FXCollections.observableArrayList (
+                "Conventional", "FHA", "VA", "Car");
+        list.setItems(items);
+        list.setOrientation(Orientation.HORIZONTAL);
+
         //create all text fields
-        TextField textPurchasePrice = new TextField("Enter Purchase Price: ");
-        TextField textTermMonths = new TextField("Enter Term Months: ");
-        TextField textDownPayment = new TextField("Enter Down Payment: ");
-        TextField textCreditScore = new TextField("Enter Credit Score: ");
-        TextField textEscrow = new TextField("Enter Escrow: ");
-        TextField textInterestRate = new TextField("Enter Interest Rate: ");
+        textPurchasePrice = new TextField();
+        textTermMonths = new TextField();
+        textDownPayment = new TextField();
+        textCreditScore = new TextField();
+        textEscrow = new TextField();
+        textInterestRate = new TextField();
 
         //add the method of click events for all text fields
         clickEvents(textCreditScore);
@@ -79,27 +113,23 @@ public class Main  extends Application {
         clickEvents(textInterestRate);
         clickEvents(textPurchasePrice);
         clickEvents(textTermMonths);
-
-
         //set to false until all boxes are filled
 //        button.setVisible(false);
 
-        StackPane layout = new StackPane();
-        layout.getChildren().addAll(submitButton,textTermMonths,textPurchasePrice,textInterestRate,textEscrow,textDownPayment,textCreditScore);
-
-        Scene scene1 = new Scene(layout, 300,300);
-        primaryStage.setScene(scene1);
-        primaryStage.sizeToScene();
-        primaryStage.show();
-
-
-
-
-
+        //create the layout using vbox
+        VBox layout = new VBox(10);
+        //add elements to the layout
+        layout.getChildren().addAll(labelPurchasePrice,textPurchasePrice,labelDownPayment,textDownPayment,labelTermMonths,textTermMonths,labelInterestRate,textInterestRate,
+                                        labelEscrow,textEscrow, labelCreditScore,textCreditScore,labelLoanType,list,submitButton);
+        //create the scene, then add the scene to the window and show it
+        mainScene = new Scene(layout, 400,500);
+        window.setScene(mainScene);
+        window.sizeToScene();
+        window.show();
         //enter code from main
-
     }
 
+    //method to clear the field
     public void clickEvents(TextField field){
         //Creating the mouse event handler
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
@@ -111,20 +141,60 @@ public class Main  extends Application {
         field.addEventFilter(MouseEvent.MOUSE_CLICKED,eventHandler);
     }
 
-    public void setValues(){
+    public boolean convertValues(){
+        try {
+            setPurchasePrice((Integer.parseInt(textPurchasePrice.getText().trim())));
+            System.out.println("credit score "+getPurchasePrice());
+            setTermMonths((Integer.parseInt(textTermMonths.getText().trim())));
+            System.out.println("term "+getTermMonths());
+            setCreditScore((Integer.parseInt(textCreditScore.getText().trim())));
+            System.out.println("credit scoree"+getCreditScore());
+            setDownPayment((Integer.parseInt(textDownPayment.getText().trim())));
+            System.out.println(getDownPayment());
+        } catch (NumberFormatException e){
+            alertBox.display("Incorrect Integer value entered", "Incorrect Integer value entered for either Purchase Price, Term, Credit Score, and or Down Payment. Please Check");
+            e.printStackTrace();
+            return false;
+        }
 
+        try {
+            setInterestRate((Double.parseDouble(textInterestRate.getText().trim())));
+            System.out.println(getInterestRate());
+        } catch (NumberFormatException e){
+            alertBox.display("Incorrect Decimal value entered", "Incorrect Decimal value entered for either Escrow and Interest Rate. Please Check");
+            e.printStackTrace();
+            return false;
+        }
+        setEscrow((Double.parseDouble(textEscrow.getText().trim())));
+        System.out.println(getEscrow());
+        return true;
+    }
 
-
+    public int selectionLoanType(){
+        int selection;
+        selection = list.getSelectionModel().getSelectedIndex();
+        return selection;
     }
 
     public void submit(Button button){
         button.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                System.out.println("Hello World");
-//                if (checkValues()) {
-//                    setTermMonths(Integer.parseInt());
-//                }
-
+                boolean isNotError;
+                isNotError=convertValues();
+                switch (selectionLoanType()){
+                    case 0:
+                        ConventionalMortgage conventionalMortgage = new ConventionalMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
+                        conventionalMortgage.calculateAmortization();
+                    case 1:
+                        FHAMortgage fhaMortgage = new FHAMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
+                        fhaMortgage.calculateAmortization();
+                    case 2:
+                        VAMortgage vaMortgage = new VAMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
+                        vaMortgage.calculateAmortization();
+                    case 3:
+                        CarMortgage carMortgage = new CarMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore());
+                        carMortgage.calculateAmortization();
+                }
             }
         }));
     }
@@ -176,4 +246,5 @@ public class Main  extends Application {
     public void setEscrow(double escrow) {
         this.escrow = escrow;
     }
+
 }
