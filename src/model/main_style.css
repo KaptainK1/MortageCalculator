@@ -1,0 +1,21 @@
+.vbox {
+    -fx-padding: 15;
+    -fx-spacing: 10;
+    -fx-background-color: #9BD770;
+    -fx-font-family: "sans-serif";
+    -fx-color: #1B3409;
+}
+
+.button{
+    -fx-background-color: #EBF7E3;
+    -fx-border-width: 25;
+    -fx-border-radius: 15;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.text-area{
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-background-color: linear-gradient(white, #66B032);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}

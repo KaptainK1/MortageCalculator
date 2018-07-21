@@ -1,5 +1,7 @@
 package model;
 
+import java.text.DecimalFormat;
+
 public abstract class Mortgage {
 
     private static final int MONTHS = 12;
@@ -10,6 +12,7 @@ public abstract class Mortgage {
     private int creditScore;
     private double monthlyPayments[];
     private double pmi;
+    DisplayBox displayBox = new DisplayBox();
 
     public Mortgage(double interestRate, int purchasePrice, int termMonths, int downPayment, int creditScore){
         if(downPayment >= purchasePrice){
@@ -218,16 +221,20 @@ public abstract class Mortgage {
 
     public void printSchedule(){
         //variable to hold the monthly payment
+        DecimalFormat format = new DecimalFormat("$0.00");
         double monthlyPayment = calculatePI();
         double interestPaid;
         double principlePaid;
+        String strMessage = "";
         //loop through the monthly payments array and print out the amount of principle paid and the amount of interest paid
         for (int i = 0; i < monthlyPayments.length; i++) {
             principlePaid=monthlyPayments[i] - getDownPayment();
             interestPaid=(monthlyPayment*(i+1))-(principlePaid);
             //to calculate the interest paid, multiple the monthly payment by the number of iterations plus 1, then subtract that from the current array index
             System.out.printf("%s %d %s $%.2f\n %s $%.2f\n", "Total Principal paid for Month", i+1, "is:", monthlyPayments[i], "Total Interest paid is:", interestPaid);
+            strMessage+=(" Total Principal paid for Month " + (i+1) + " is: " + format.format(monthlyPayments[i]) + " Total Interest paid is: " + format.format(interestPaid) + "\n");
         }
+        displayBox.display("Amortization Schedule",strMessage,DisplayBox.class.getResource("main_style.css").toExternalForm());
     }
 
 //Setters and Getters
