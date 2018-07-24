@@ -13,10 +13,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.*;
-import javafx.*;
 
-import javax.xml.soap.Text;
-import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main  extends Application {
     private int purchasePrice;
@@ -25,18 +24,20 @@ public class Main  extends Application {
     private int creditScore;
     private double escrow;
     private double interestRate;
+//    public Logger log;
+//
+//    Stage stage;
+//    Scene mainScene;
+//    Button submitButton;
+//    TextField textPurchasePrice;
+//    TextField textTermMonths;
+//    TextField textDownPayment;
+//    TextField textEscrow;
+//    TextField textInterestRate;
+//    TextField textCreditScore;
+    //ListView<String> list = new ListView<String>();
+        private AlertBox alertBox = new AlertBox();
 
-    Stage window;
-    Scene mainScene;
-    Button submitButton;
-    TextField textPurchasePrice;
-    TextField textTermMonths;
-    TextField textDownPayment;
-    TextField textEscrow;
-    TextField textInterestRate;
-    TextField textCreditScore;
-    AlertBox alertBox = new AlertBox();
-    ListView<String> list = new ListView<String>();
 
     public static void main(String args[]){
         //create the UI
@@ -72,116 +73,118 @@ public class Main  extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        window=primaryStage;
-        window.setTitle("Mortgage Calculator");
-        window.setMinHeight(300);
-        window.setMinWidth(300);
-
-        //create the button
-        submitButton = new Button();
-        submitButton.setText("Submit");
-        //run the submit function when the button is clicked
-        submit(submitButton);
-
-        //create labels
-        Label labelPurchasePrice = new Label("Enter Purchase Price: ");
-        Label labelTermMonths = new Label("Enter Term Months: ");
-        Label labelDownPayment = new Label("Enter Down Payment: ");
-        Label labelCreditScore = new Label("Enter Credit Score: ");
-        Label labelEscrow = new Label("Enter Escrow: ");
-        Label labelInterestRate = new Label("Enter Interest Rate: ");
-        Label labelLoanType = new Label("Select the Loan Type");
-
-        //create list for loan objects
-        ObservableList<String> items =FXCollections.observableArrayList (
-                "Conventional", "FHA", "VA", "Car");
-        list.setItems(items);
-        list.setOrientation(Orientation.HORIZONTAL);
-
-        //create all text fields
-        textPurchasePrice = new TextField();
-        textTermMonths = new TextField();
-        textDownPayment = new TextField();
-        textCreditScore = new TextField();
-        textEscrow = new TextField();
-        textInterestRate = new TextField();
-
-        //add the method of click events for all text fields
-        clickEvents(textCreditScore);
-        clickEvents(textDownPayment);
-        clickEvents(textEscrow);
-        clickEvents(textInterestRate);
-        clickEvents(textPurchasePrice);
-        clickEvents(textTermMonths);
-        //set to false until all boxes are filled
-//        button.setVisible(false);
-
-        //create the layout using vbox
-        VBox layout = new VBox(10);
-        //add elements to the layout
-        layout.getChildren().addAll(labelPurchasePrice,textPurchasePrice,labelDownPayment,textDownPayment,labelTermMonths,textTermMonths,labelInterestRate,textInterestRate,
-                                        labelEscrow,textEscrow, labelCreditScore,textCreditScore,labelLoanType,list,submitButton);
-        //create the scene, then add the scene to the window and show it
-        mainScene = new Scene(layout, 400,500);
-        window.setScene(mainScene);
-        window.sizeToScene();
-        window.show();
-        //enter code from main
+        Main_Layout stage = new Main_Layout();
+        primaryStage = stage.createMainLayout();
+//        window=primaryStage;
+//        window.setTitle("Mortgage Calculator");
+//        window.setMinHeight(300);
+//        window.setMinWidth(300);
+//
+//        //create the button
+//        submitButton = new Button();
+//        submitButton.setText("Submit");
+//        //run the submit function when the button is clicked
+//        submit(submitButton);
+//
+//        //create labels
+//        Label labelPurchasePrice = new Label("Enter Purchase Price: ");
+//        Label labelTermMonths = new Label("Enter Term Months: ");
+//        Label labelDownPayment = new Label("Enter Down Payment: ");
+//        Label labelCreditScore = new Label("Enter Credit Score: ");
+//        Label labelEscrow = new Label("Enter Escrow: ");
+//        Label labelInterestRate = new Label("Enter Interest Rate: ");
+//        Label labelLoanType = new Label("Select the Loan Type");
+//
+//        //create list for loan objects
+//        ObservableList<String> items =FXCollections.observableArrayList (
+//                "Conventional", "FHA", "VA", "Car");
+//        list.setItems(items);
+//        list.setOrientation(Orientation.HORIZONTAL);
+//
+//        //create all text fields
+//        textPurchasePrice = new TextField();
+//        textTermMonths = new TextField();
+//        textDownPayment = new TextField();
+//        textCreditScore = new TextField();
+//        textEscrow = new TextField();
+//        textInterestRate = new TextField();
+//
+//        //add the method of click events for all text fields
+//        clickEvents(textCreditScore);
+//        clickEvents(textDownPayment);
+//        clickEvents(textEscrow);
+//        clickEvents(textInterestRate);
+//        clickEvents(textPurchasePrice);
+//        clickEvents(textTermMonths);
+//        //set to false until all boxes are filled
+////        button.setVisible(false);
+//
+//        //create the layout using vbox
+//        VBox layout = new VBox(10);
+//        //add elements to the layout
+//        layout.getChildren().addAll(labelPurchasePrice,textPurchasePrice,labelDownPayment,textDownPayment,labelTermMonths,textTermMonths,labelInterestRate,textInterestRate,
+//                                        labelEscrow,textEscrow, labelCreditScore,textCreditScore,labelLoanType,list,submitButton);
+//        //create the scene, then add the scene to the window and show it
+//        mainScene = new Scene(layout, 400,500);
+//        window.setScene(mainScene);
+//        window.sizeToScene();
+        submit(stage.getSubmitButton(),stage.selectionLoanType(), stage);
+        primaryStage.show();
     }
 
     //method to clear the field
-    public void clickEvents(TextField field){
-        //Creating the mouse event handler
-        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                field.clear();
-            }
-        };
-        field.addEventFilter(MouseEvent.MOUSE_CLICKED,eventHandler);
-    }
+//    public void clickEvents(TextField field){
+//        //Creating the mouse event handler
+//        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent e) {
+//                field.clear();
+//            }
+//        };
+//        field.addEventFilter(MouseEvent.MOUSE_CLICKED,eventHandler);
+//    }
 
-    public boolean convertValues(){
+    public boolean convertValues(Main_Layout layout){
         try {
-            setPurchasePrice((Integer.parseInt(textPurchasePrice.getText().trim())));
+            setPurchasePrice((Integer.parseInt(layout.getTextPurchasePrice().getText().trim())));
             System.out.println("credit score "+getPurchasePrice());
-            setTermMonths((Integer.parseInt(textTermMonths.getText().trim())));
+
+            setTermMonths((Integer.parseInt(layout.getTextTermMonths().getText().trim())));
             System.out.println("term "+getTermMonths());
-            setCreditScore((Integer.parseInt(textCreditScore.getText().trim())));
-            System.out.println("credit scoree"+getCreditScore());
-            setDownPayment((Integer.parseInt(textDownPayment.getText().trim())));
+            setCreditScore((Integer.parseInt(layout.getTextCreditScore().getText().trim())));
+            System.out.println("credit score"+getCreditScore());
+            setDownPayment((Integer.parseInt(layout.getTextDownPayment().getText().trim())));
             System.out.println(getDownPayment());
         } catch (NumberFormatException e){
             alertBox.display("Incorrect Integer value entered", "Incorrect Integer value entered for either Purchase Price, Term, Credit Score, and or Down Payment. Please Check");
             e.printStackTrace();
             return false;
         }
-
         try {
-            setInterestRate((Double.parseDouble(textInterestRate.getText().trim())));
+            setInterestRate((Double.parseDouble(layout.getTextInterestRate().getText().trim())));
             System.out.println(getInterestRate());
         } catch (NumberFormatException e){
             alertBox.display("Incorrect Decimal value entered", "Incorrect Decimal value entered for either Escrow and Interest Rate. Please Check");
             e.printStackTrace();
             return false;
         }
-        setEscrow((Double.parseDouble(textEscrow.getText().trim())));
+        setEscrow((Double.parseDouble(layout.getTextEscrow().getText().trim())));
         System.out.println(getEscrow());
         return true;
     }
 
-    public int selectionLoanType(){
-        int selection;
-        selection = list.getSelectionModel().getSelectedIndex();
-        return selection;
-    }
+//    public int selectionLoanType(){
+//        int selection;
+//        selection = list.getSelectionModel().getSelectedIndex();
+//        return selection;
+//    }
 
-    public void submit(Button button){
+    public void submit(Button button, int selection, Main_Layout layout){
         button.setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
                 boolean isNotError;
-                isNotError=convertValues();
-                switch (selectionLoanType()){
+                isNotError=convertValues(layout);
+                switch (selection){
                     case 0:
                         ConventionalMortgage conventionalMortgage = new ConventionalMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
                         conventionalMortgage.calculateAmortization();

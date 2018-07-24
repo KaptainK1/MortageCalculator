@@ -7,8 +7,13 @@ import java.text.DecimalFormat;
 public class Tester extends Application {
     public static void main (String args[]){
         launch(args);
-    }
 
+//        float test;
+//            test = 1 / 3f;
+//            test += 1/3f;
+//            test += 1/3f;
+//        System.out.println(test);
+    }
     @Override
     public void start(Stage primaryStage) throws Exception {
 
