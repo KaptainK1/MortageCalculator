@@ -22,12 +22,16 @@ public class Main  extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        //create the main layout class
         stage = new Main_Layout();
+        //set the primary stage to the main layout class
         primaryStage = stage.createMainLayout();
         primaryStage.show();
-        submit(stage.getSubmitButton(), stage);
+        //run the submit method which takes the ui (main layout)
+        submit(stage);
     }
 
+    //Method to check, then covert values from string to their respective types
     public void convertValues(Main_Layout layout){
         try {
             setPurchasePrice((Integer.parseInt(layout.getTextPurchasePrice().getText().trim())));
@@ -53,11 +57,13 @@ public class Main  extends Application {
         System.out.println(getEscrow());
     }
 
-    public void submit(Button button, Main_Layout layout){
-        button.setOnMouseClicked((new EventHandler<MouseEvent>() {
+    public void submit(Main_Layout layout){
+        //run the getter method for the button
+        layout.getSubmitButton().setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
-                boolean isNotError;
+                //run the covert values method
                 convertValues(layout);
+                //switch on the selection loan method to get which loan was selected, then create the mortgage class
                 switch (layout.selectionLoanType()){
                     case 0:
                         ConventionalMortgage conventionalMortgage = new ConventionalMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
