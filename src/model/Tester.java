@@ -1,5 +1,6 @@
 package model;
 
+import Layouts.DisplayBox;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.text.DecimalFormat;

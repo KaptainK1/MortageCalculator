@@ -1,3 +1,5 @@
+package Layouts;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -10,7 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.*;
 
 public class Main_Layout {
     private Stage window = new Stage();
