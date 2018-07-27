@@ -24,6 +24,7 @@ public class Main_Layout {
     private TextField textCreditScore;
     private AlertBox alertBox = new AlertBox();
     private ListView<String> list = new ListView<String>();
+    private int loanSelection;
 
     public Stage createMainLayout(){
 //        Stage window = new Stage();
@@ -55,6 +56,13 @@ public class Main_Layout {
         textCreditScore = new TextField();
         textEscrow = new TextField();
         textInterestRate = new TextField();
+
+        textPurchasePrice.setText("172000");
+        textTermMonths.setText("360");
+        textDownPayment.setText("6880");
+        textCreditScore.setText("750");
+        textEscrow.setText("200");
+        textInterestRate.setText("4.5");
 
         //add the method of click events for all text fields
         clickEvents(textCreditScore);
@@ -91,11 +99,18 @@ public class Main_Layout {
     }
 
     public int selectionLoanType(){
-        int selection;
-        selection = list.getSelectionModel().getSelectedIndex();
-        return selection;
+        setLoanSelection(list.getSelectionModel().getSelectedIndex());
+        System.out.println(getLoanSelection());
+        return getLoanSelection();
     }
 
+    public int getLoanSelection(){
+        return loanSelection;
+    }
+
+    public void setLoanSelection(int loanSelection){
+        this.loanSelection=loanSelection;
+    }
 
     public Stage getWindow() {
         return window;
