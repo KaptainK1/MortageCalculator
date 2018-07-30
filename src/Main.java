@@ -14,7 +14,7 @@ public class Main  extends Application {
     private int creditScore;
     private double escrow;
     private double interestRate;
-    Main_Layout stage;
+    Main_Layout layout = new Main_Layout();
     private AlertBox alertBox = new AlertBox();
 
     public static void main(String args[]){
@@ -25,12 +25,11 @@ public class Main  extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         //create the main layout class
-        stage = new Main_Layout();
         //set the primary stage to the main layout class
-        primaryStage = stage.createMainLayout();
+        primaryStage = layout.createMainLayout("main_form_style.css");
         primaryStage.show();
         //run the submit method which takes the ui (main layout)
-        submit(stage);
+        submit(layout);
     }
 
     //Method to check, then covert values from string to their respective types

@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class Main_Layout {
@@ -24,16 +24,14 @@ public class Main_Layout {
     private TextField textInterestRate;
     private TextField textCreditScore;
     private AlertBox alertBox = new AlertBox();
-    private ListView<String> list = new ListView<String>();
+    private ListView<String> list = new ListView<>();
     private int loanSelection;
 
-    public Stage createMainLayout(){
+    public Stage createMainLayout(String stylesheet){
 //        Stage window = new Stage();
-        //create the button
+        //create the submit button
         submitButton = new Button();
         submitButton.setText("Submit");
-        //run the submit function when the button is clicked
-//        submit(submitButton);
 
         //create labels
         Label labelPurchasePrice = new Label("Enter Purchase Price: ");
@@ -58,6 +56,21 @@ public class Main_Layout {
         textEscrow = new TextField();
         textInterestRate = new TextField();
 
+        //create the clear button
+        Button clearButton = new Button();
+        clearButton.setText("Clear");
+        //create a textfield array and assign indexes
+        TextField allFields[] = new TextField[6];
+        allFields[0] = getTextPurchasePrice();
+        allFields[1] = getTextTermMonths();
+        allFields[2] = getTextDownPayment();
+        allFields[3] = getTextCreditScore();
+        allFields[4] = getTextEscrow();
+        allFields[5] = getTextInterestRate();
+
+        //set the button to the click event to clear all text fields
+        clearFields(clearButton, allFields);
+
         textPurchasePrice.setText("172000");
         textTermMonths.setText("360");
         textDownPayment.setText("6880");
@@ -73,13 +86,20 @@ public class Main_Layout {
         clickEvents(textPurchasePrice);
         clickEvents(textTermMonths);
 
+        BorderPane borderPane = new BorderPane();
         //create the layout using vbox
+        HBox buttons = new HBox(10);
         VBox layout = new VBox(10);
         //add elements to the layout
         layout.getChildren().addAll(labelPurchasePrice,textPurchasePrice,labelDownPayment,textDownPayment,labelTermMonths,textTermMonths,labelInterestRate,textInterestRate,
-                labelEscrow,textEscrow, labelCreditScore,textCreditScore,labelLoanType,list,submitButton);
+                labelEscrow,textEscrow, labelCreditScore,textCreditScore,labelLoanType,list);
+        buttons.getChildren().addAll(submitButton,clearButton);
+        borderPane.setCenter(layout);
+        borderPane.setBottom(buttons);
+
         //create the scene, then add the scene to the window and show it
-        mainScene = new Scene(layout, 400,500);
+        mainScene = new Scene(borderPane, 400,500);
+        mainScene.getStylesheets().add(stylesheet);
         window.setScene(mainScene);
         window.sizeToScene();
 
@@ -103,6 +123,17 @@ public class Main_Layout {
         setLoanSelection(list.getSelectionModel().getSelectedIndex());
         System.out.println(getLoanSelection());
         return getLoanSelection();
+    }
+    
+    public void clearFields(Button button, TextField field[]){
+        button.setOnMouseClicked((new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                for (TextField currentField: field) {
+                    currentField.clear();
+                }
+            }
+        }));
     }
 
     public int getLoanSelection(){
