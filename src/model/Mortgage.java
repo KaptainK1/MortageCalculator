@@ -236,7 +236,7 @@ public abstract class Mortgage {
             System.out.printf("%s %d %s $%.2f\n %s $%.2f\n", "Total Principal paid for Month", i+1, "is:", monthlyPayments[i], "Total Interest paid is:", interestPaid);
             strMessage+=(" Total Principal paid for Month " + (i+1) + " is: " + format.format(monthlyPayments[i]) + " Total Interest paid is: " + format.format(interestPaid) + "\n");
         }
-        displayBox.display("Amortization Schedule",strMessage,DisplayBox.class.getResource("main_style.css").toExternalForm());
+        displayBox.display("Amortization Schedule",strMessage,"model/main_style.css");
     }
 
 //Setters and Getters
