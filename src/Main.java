@@ -1,5 +1,6 @@
 import Layouts.AlertBox;
 import Layouts.Main_Layout;
+import Layouts.ConfirmBox;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
@@ -33,32 +34,33 @@ public class Main  extends Application {
     }
 
     //Method to check, then covert values from string to their respective types
-    public void convertValues(Main_Layout layout){
+    private void convertValues(Main_Layout layout){
         try {
             setPurchasePrice((Integer.parseInt(layout.getTextPurchasePrice().getText().trim())));
-            System.out.println("credit score "+getPurchasePrice());
+            System.out.println("purchase price "+getPurchasePrice());
             setTermMonths((Integer.parseInt(layout.getTextTermMonths().getText().trim())));
             System.out.println("term "+getTermMonths());
             setCreditScore((Integer.parseInt(layout.getTextCreditScore().getText().trim())));
-            System.out.println("credit score"+getCreditScore());
+            System.out.println("credit score "+getCreditScore());
             setDownPayment((Integer.parseInt(layout.getTextDownPayment().getText().trim())));
-            System.out.println(getDownPayment());
+            System.out.println("down payment " + getDownPayment());
         } catch (NumberFormatException e){
             alertBox.display("Incorrect Integer value entered", "Incorrect Integer value entered for either Purchase Price, Term, Credit Score, and or Down Payment. Please Check");
             e.printStackTrace();
         }
         try {
             setInterestRate((Double.parseDouble(layout.getTextInterestRate().getText().trim())));
-            System.out.println(getInterestRate());
+            System.out.println("Interest Rate " + getInterestRate());
         } catch (NumberFormatException e){
             alertBox.display("Incorrect Decimal value entered", "Incorrect Decimal value entered for either Escrow and Interest Rate. Please Check");
             e.printStackTrace();
         }
         setEscrow((Double.parseDouble(layout.getTextEscrow().getText().trim())));
+        System.out.println("Escrow" + getEscrow());
         System.out.println(getEscrow());
     }
 
-    public void submit(Main_Layout layout){
+    private void submit(Main_Layout layout){
         //run the getter method for the button
         layout.getSubmitButton().setOnMouseClicked((new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
@@ -68,20 +70,26 @@ public class Main  extends Application {
                 switch (layout.selectionLoanType()){
                     case 0:
                         ConventionalMortgage conventionalMortgage = new ConventionalMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
+                        System.out.printf("%s = %f", "The Monthly Mortgage P and I is ", (conventionalMortgage.calculatePI()+conventionalMortgage.getEscrow()));
                         conventionalMortgage.calculateAmortization();
                     case 1:
                         FHAMortgage fhaMortgage = new FHAMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
+                        System.out.printf("%s = %f", "The Monthly Mortgage P and I is ", (fhaMortgage.calculatePI())+fhaMortgage.getEscrow());
                         fhaMortgage.calculateAmortization();
                     case 2:
                         VAMortgage vaMortgage = new VAMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
+                        System.out.printf("%s = %f", "The Monthly Mortgage P and I is ", (vaMortgage.calculatePI())+vaMortgage.getEscrow());
                         vaMortgage.calculateAmortization();
                     case 3:
                         CarMortgage carMortgage = new CarMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore());
+                        System.out.printf("%s = %f", "The Monthly Mortgage P and I is ", carMortgage.calculatePI());
                         carMortgage.calculateAmortization();
                 }
             }
         }));
     }
+
+
 
     public double getInterestRate() {
         return interestRate;

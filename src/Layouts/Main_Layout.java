@@ -26,12 +26,19 @@ public class Main_Layout {
     private AlertBox alertBox = new AlertBox();
     private ListView<String> list = new ListView<>();
     private int loanSelection;
+    public ConfirmBox confirmBox = new ConfirmBox();
 
     public Stage createMainLayout(String stylesheet){
 //        Stage window = new Stage();
         //create the submit button
-        submitButton = new Button();
-        submitButton.setText("Submit");
+        submitButton = new Button("Submit");
+        Button closeButton = new Button("Close");
+        close(closeButton);
+
+        window.setOnCloseRequest(event -> {
+            event.consume();
+            onClose();
+        });
 
         //create labels
         Label labelPurchasePrice = new Label("Enter Purchase Price: ");
@@ -93,7 +100,7 @@ public class Main_Layout {
         //add elements to the layout
         layout.getChildren().addAll(labelPurchasePrice,textPurchasePrice,labelDownPayment,textDownPayment,labelTermMonths,textTermMonths,labelInterestRate,textInterestRate,
                 labelEscrow,textEscrow, labelCreditScore,textCreditScore,labelLoanType,list);
-        buttons.getChildren().addAll(submitButton,clearButton);
+        buttons.getChildren().addAll(submitButton,clearButton,closeButton);
         borderPane.setCenter(layout);
         borderPane.setBottom(buttons);
 
@@ -106,9 +113,8 @@ public class Main_Layout {
         return window;
     }
 
-
     //method to clear the field
-    public void clickEvents(TextField field){
+    private void clickEvents(TextField field){
         //Creating the mouse event handler
         EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
             @Override
@@ -125,15 +131,31 @@ public class Main_Layout {
         return getLoanSelection();
     }
     
-    public void clearFields(Button button, TextField field[]){
+    private void clearFields(Button button, TextField field[]){
         button.setOnMouseClicked((new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 for (TextField currentField: field) {
                     currentField.clear();
                 }
+                setLoanSelection(-1);
             }
         }));
+    }
+
+    private void close(Button button){
+        button.setOnMouseClicked((new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                onClose();
+            }
+        }));
+    }
+
+    private void onClose(){
+        Boolean answer = confirmBox.displayConfirmBox("Close Dialogue","Are you sure you want to close?", "model/main_style.css");
+        if (answer)
+            window.close();
     }
 
     public int getLoanSelection(){
@@ -231,6 +253,5 @@ public class Main_Layout {
     public void setList(ListView<String> list) {
         this.list = list;
     }
-
 
 }

@@ -1,13 +1,9 @@
-.vbox {
+.vbox, .hbox {
     -fx-padding: 15;
     -fx-spacing: 10;
     -fx-background-color: #9BD770;
     -fx-font-family: "sans-serif";
     -fx-color: #006600;
-}
-
-.hbox{
-
 }
 
 .button{

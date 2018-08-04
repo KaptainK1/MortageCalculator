@@ -14,7 +14,7 @@ public abstract class Mortgage {
     private int creditScore;
     private double monthlyPayments[];
     private double pmi;
-    DisplayBox displayBox = new DisplayBox();
+    private DisplayBox displayBox = new DisplayBox();
 
     public Mortgage(double interestRate, int purchasePrice, int termMonths, int downPayment, int creditScore){
         if(downPayment >= purchasePrice){

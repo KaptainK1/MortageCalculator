@@ -19,3 +19,13 @@
     -fx-background-color: linear-gradient(white, #66B032);
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
+
+.label{
+    -fx-font-family: "sans-serif";
+    -fx-font-weight: bold;
+    -fx-text-fill: "#006600";
+    -fx-border-width: 25;
+    -fx-border-radius: 15;
+    -fx-background-color: linear-gradient(white, #CCFFCC);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
