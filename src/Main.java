@@ -72,18 +72,22 @@ public class Main  extends Application {
                         ConventionalMortgage conventionalMortgage = new ConventionalMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
                         System.out.printf("%s = %f", "The Monthly Mortgage P and I is ", (conventionalMortgage.calculatePI()+conventionalMortgage.getEscrow()));
                         conventionalMortgage.calculateAmortization();
+                        break;
                     case 1:
                         FHAMortgage fhaMortgage = new FHAMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
                         System.out.printf("%s = %f", "The Monthly Mortgage P and I is ", (fhaMortgage.calculatePI())+fhaMortgage.getEscrow());
                         fhaMortgage.calculateAmortization();
+                        break;
                     case 2:
                         VAMortgage vaMortgage = new VAMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
                         System.out.printf("%s = %f", "The Monthly Mortgage P and I is ", (vaMortgage.calculatePI())+vaMortgage.getEscrow());
                         vaMortgage.calculateAmortization();
+                        break;
                     case 3:
                         CarMortgage carMortgage = new CarMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore());
                         System.out.printf("%s = %f", "The Monthly Mortgage P and I is ", carMortgage.calculatePI());
                         carMortgage.calculateAmortization();
+                        break;
                 }
             }
         }));

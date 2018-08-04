@@ -30,7 +30,7 @@ public class AlertBox {
         layout.getChildren().addAll(label,closeButton);
         layout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(layout);
-        scene.getStylesheets().add(DisplayBox.class.getResource("main_style.css").toExternalForm());
+        scene.getStylesheets().add("main_style.css");
         window.setScene(scene);
         window.showAndWait();
 

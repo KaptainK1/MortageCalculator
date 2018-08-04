@@ -41,7 +41,7 @@ public class DisplayBox {
         Scene scene = new Scene(border);
         scene.getStylesheets().add(stylesheet);
         window.setScene(scene);
-        window.showAndWait();
+        window.show();
 
     }
 }
