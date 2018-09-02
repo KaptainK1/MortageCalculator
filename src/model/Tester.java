@@ -1,24 +1,13 @@
 package model;
 
-import Layouts.Main_Layout;
-import javafx.application.Application;
-import javafx.stage.Stage;
+import java.math.BigDecimal;
 
-public class Tester extends Application {
+public class Tester{
     public static void main (String args[]){
-        launch(args);
-    }
-    @Override
-    public void start(Stage primaryStage) throws Exception {
 
-//        DecimalFormat format = new DecimalFormat("$0.00");
-//        double test = 122147.381260433;
-//        format.format(test);
-//        String string = String.valueOf(test);
-
-        Main_Layout box = new Main_Layout();
-        primaryStage = box.createMainLayout("main_form_style.css");
-        primaryStage.show();
+        ConventionalMortgage mortaage = new ConventionalMortgage(4.5,172000,360,6880,750,200);
+        mortaage.calculateAmortization();
 
     }
+
 }

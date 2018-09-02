@@ -2,6 +2,8 @@ package model;
 
 import Layouts.DisplayBox;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 public abstract class Mortgage {
@@ -12,8 +14,8 @@ public abstract class Mortgage {
     private int termMonths;
     private int downPayment;
     private int creditScore;
-    private double monthlyPayments[];
-    private double pmi;
+    private BigDecimal monthlyPayments[];
+//    private double pmi;
     private DisplayBox displayBox = new DisplayBox();
 
     public Mortgage(double interestRate, int purchasePrice, int termMonths, int downPayment, int creditScore){
@@ -37,13 +39,14 @@ public abstract class Mortgage {
         this.termMonths=termMonths;
         this.purchasePrice=purchasePrice;
         this.creditScore=creditScore;
-        monthlyPayments = new double[getTermMonths()];
+        monthlyPayments = new BigDecimal[getTermMonths()];
     }
     //Method for calculating the total monthly cost of a loans p and i
-    public double calculatePI(){
-        double monthlyPayment;
+    public BigDecimal calculatePI(){
+        BigDecimal monthlyPayment;
         double topEquation;
         double bottomEquation;
+        double totalEquation;
         //convert interest rate into a percentage
         double r = (getInterestRate()/MONTHS)/100;
         //Equation is M= P(r + 1)^n / ((1+r)^n - 1)
@@ -51,12 +54,40 @@ public abstract class Mortgage {
         //bottom equation represents ((1+r)^n - 1)
         topEquation =((r)*(Math.pow(1+r,getTermMonths())));
         bottomEquation= ((Math.pow(1+r,getTermMonths())-1));
-        monthlyPayment=getPurchasePrice()*(topEquation/bottomEquation);
+        totalEquation=topEquation/bottomEquation;
+        monthlyPayment=BigDecimal.valueOf(getPurchasePrice()).multiply(BigDecimal.valueOf(totalEquation));
+
         return monthlyPayment;
     }
     //method for calculating the Amortization for the loan
     //for each month calculate the interest and principle paid, then the principle is added into the array
-    public abstract void calculateAmortization();
+    public void calculateAmortization(){
+        BigDecimal interest;
+        BigDecimal principal=new BigDecimal(getPurchasePrice());
+        BigDecimal totalPrincipal=new BigDecimal(0);
+        //convert interest rate into a percentage
+        double r = (getInterestRate() / MONTHS) / 100;
+        //run the calculatePI method to find the monthly payment
+        BigDecimal payment = (calculatePI());
+
+        for (int j = 0; j < getMonthlyPayments().length; j++) {
+            //set the interest by multiplying the principal by the rate
+            interest = principal.multiply(new BigDecimal(r));
+            interest=interest.setScale(2,BigDecimal.ROUND_DOWN);
+            //set the principal equal to itself minus the payment minus the interest
+            principal=(principal.subtract(payment.subtract(interest)));
+            totalPrincipal=(totalPrincipal.add(payment.subtract(interest)));
+
+            principal=principal.setScale(2,BigDecimal.ROUND_DOWN);
+            totalPrincipal=totalPrincipal.setScale(2,BigDecimal.ROUND_DOWN);
+
+            setSpecificMonth(j,(totalPrincipal));
+        }
+        addPMI();
+        setMonthlyPayments(getMonthlyPayments());
+        //run the print schedule method that prints out the array
+        printSchedule();
+    }
 
     //need to understand how refinancing works
     public void refinance(){
@@ -69,7 +100,7 @@ public abstract class Mortgage {
         double PMI = getPurchasePrice()*.20d;
 
         for (int i = 0; i < getTermMonths(); i++) {
-            totalPaidAmount=totalPaidAmount+monthlyPayments[i];
+            totalPaidAmount=totalPaidAmount+monthlyPayments[i].doubleValue();
             if (totalPaidAmount>=PMI){
                 PMIMonth=i+1;
                 return PMIMonth;
@@ -79,29 +110,30 @@ public abstract class Mortgage {
     }
 
     //method to calculate the monthly p/i for multiple mortgages
-    public static double totalMonthlyPayments(Mortgage[] mortgage){
-        double total =0;
-
-        for (Mortgage currentMortgage : mortgage) {
-            System.out.println(currentMortgage.calculatePI());
-            total+=currentMortgage.calculatePI();
-            if (currentMortgage instanceof ConventionalMortgage || currentMortgage instanceof FHAMortgage || currentMortgage instanceof VAMortgage){
-                total+=currentMortgage.calculatePMI();
-            }
-        }
-        return total;
-    }
+//    public static double totalMonthlyPayments(Mortgage[] mortgage){
+//        double total =0;
+//
+//        for (Mortgage currentMortgage : mortgage) {
+//            System.out.println(currentMortgage.calculatePI());
+//            total+=currentMortgage.calculatePI();
+//            if (currentMortgage instanceof ConventionalMortgage || currentMortgage instanceof FHAMortgage || currentMortgage instanceof VAMortgage){
+//                total+=currentMortgage.calculatePMI();
+//            }
+//        }
+//        return total;
+//    }
 
     //method to add pmi to each month
     //calls method return pmi which will determine the amount of months that will have pmi
     public void addPMI(){
         int months = returnPMIMonths();
         for (int i = 0; i < months; i++) {
-            monthlyPayments[i]+=calculatePMI();
+            monthlyPayments[i].add(calculatePMI().add(monthlyPayments[i]));
         }
     }
 
-    public double calculatePMI(){
+    public BigDecimal calculatePMI(){
+        BigDecimal pmiAmount;
         double loanAmount= getPurchasePrice()-getDownPayment();
         double lmv = loanAmount / getPurchasePrice();
         double pmiPercent = 0.00;
@@ -212,8 +244,11 @@ public abstract class Mortgage {
         }
 
         pmiPercent=pmiPercent/100;
-        setPmi((pmiPercent*getPurchasePrice()/12));
-        return getPmi();
+//        setPmi((pmiPercent*getPurchasePrice()/12));
+        pmiAmount=BigDecimal.valueOf(pmiPercent).multiply(BigDecimal.valueOf(getPurchasePrice()).divide(BigDecimal.valueOf(12),2, BigDecimal.ROUND_FLOOR));
+        pmiAmount=pmiAmount.setScale(2,BigDecimal.ROUND_FLOOR);
+//        setPmi(pmiAmount.doubleValue());
+        return pmiAmount;
     }
 
     public void yearPrinciple(int year){
@@ -224,16 +259,17 @@ public abstract class Mortgage {
     public void printSchedule(){
         //variable to hold the monthly payment
         DecimalFormat format = new DecimalFormat("$0.00");
-        double monthlyPayment = calculatePI();
-        double interestPaid;
-        double principlePaid;
+        BigDecimal monthlyPayment = calculatePI();
+        BigDecimal interestPaid;
+        BigDecimal principlePaid;
         String strMessage = "";
         //loop through the monthly payments array and print out the amount of principle paid and the amount of interest paid
         for (int i = 0; i < monthlyPayments.length; i++) {
-            principlePaid=monthlyPayments[i] - getDownPayment();
-            interestPaid=(monthlyPayment*(i+1))-(principlePaid);
+            principlePaid=monthlyPayments[i];
+
+            interestPaid=(monthlyPayment.multiply(BigDecimal.valueOf(i).add(BigDecimal.valueOf(1)))).subtract(principlePaid);
             //to calculate the interest paid, multiple the monthly payment by the number of iterations plus 1, then subtract that from the current array index
-            System.out.printf("%s %d %s $%.2f\n %s $%.2f\n", "Total Principal paid for Month", i+1, "is:", monthlyPayments[i], "Total Interest paid is:", interestPaid);
+            System.out.printf("%s %d %s $%.2f\n %s $%.2f\n", "Total Principal paid for Month", i+1, "is:", principlePaid, "Total Interest paid is:", interestPaid);
             strMessage+=(" Total Principal paid for Month " + (i+1) + " is: " + format.format(monthlyPayments[i]) + " Total Interest paid is: " + format.format(interestPaid) + "\n");
         }
         displayBox.display("Amortization Schedule",strMessage,"model/main_style.css");
@@ -244,7 +280,7 @@ public abstract class Mortgage {
         return interestRate;
     }
 
-    public void setSpecificMonth(int position, double value){
+    public void setSpecificMonth(int position, BigDecimal value){
         monthlyPayments[position]=value;
     }
 
@@ -276,21 +312,17 @@ public abstract class Mortgage {
         this.downPayment = downPayment;
     }
 
-    public double[] getMonthlyPayments() {
+    public BigDecimal[] getMonthlyPayments() {
         return monthlyPayments;
     }
 
-    public void setMonthlyPayments(double[] monthlyPayments) {
+    public void setMonthlyPayments(BigDecimal[] monthlyPayments) {
         this.monthlyPayments = monthlyPayments;
     }
 
-    public double getPmi() {
-        return pmi;
-    }
-
-    public void setPmi(double pmi) {
-        this.pmi = pmi;
-    }
+//    public void setPmi(double pmi) {
+//        this.pmi = pmi;
+//    }
 
     public int getCreditScore() {
         return creditScore;

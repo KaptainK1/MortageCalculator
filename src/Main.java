@@ -8,6 +8,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.*;
 
+import java.math.BigDecimal;
+
 public class Main  extends Application {
     private int purchasePrice;
     private int termMonths;
@@ -70,17 +72,17 @@ public class Main  extends Application {
                 switch (layout.selectionLoanType()){
                     case 0:
                         ConventionalMortgage conventionalMortgage = new ConventionalMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
-                        System.out.printf("%s = %f", "The Monthly Mortgage P and I is ", (conventionalMortgage.calculatePI()+conventionalMortgage.getEscrow()));
+                        System.out.printf("%s = %f", "The Monthly Mortgage Payment with Escrow is ", (conventionalMortgage.calculatePI().add(BigDecimal.valueOf(conventionalMortgage.getEscrow()))));
                         conventionalMortgage.calculateAmortization();
                         break;
                     case 1:
                         FHAMortgage fhaMortgage = new FHAMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
-                        System.out.printf("%s = %f", "The Monthly Mortgage P and I is ", (fhaMortgage.calculatePI())+fhaMortgage.getEscrow());
+                        System.out.printf("%s = %f", "The Monthly Mortgage Payment with Escrow is ", (fhaMortgage.calculatePI().add(BigDecimal.valueOf(fhaMortgage.getEscrow()))));
                         fhaMortgage.calculateAmortization();
                         break;
                     case 2:
                         VAMortgage vaMortgage = new VAMortgage(getInterestRate(),getPurchasePrice(),getTermMonths(),getDownPayment(),getCreditScore(),getEscrow());
-                        System.out.printf("%s = %f", "The Monthly Mortgage P and I is ", (vaMortgage.calculatePI())+vaMortgage.getEscrow());
+                        System.out.printf("%s = %f", "The Monthly Mortgage Payment with Escrow is ", (vaMortgage.calculatePI().add(BigDecimal.valueOf(vaMortgage.getEscrow()))));
                         vaMortgage.calculateAmortization();
                         break;
                     case 3:

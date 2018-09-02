@@ -1,5 +1,7 @@
 package model;
 
+import java.math.BigDecimal;
+
 public class VAMortgage extends Mortgage{
 
     private double escrow;
@@ -9,13 +11,8 @@ public class VAMortgage extends Mortgage{
     }
 
     @Override
-    public double calculatePI() {
-        return 0;
-    }
-
-    @Override
-    public void calculateAmortization() {
-
+    public BigDecimal calculatePI() {
+        return null;
     }
 
     public double getEscrow() {
