@@ -15,7 +15,6 @@ public abstract class Mortgage {
     private int downPayment;
     private int creditScore;
     private BigDecimal monthlyPayments[];
-//    private double pmi;
     private DisplayBox displayBox = new DisplayBox();
 
     public Mortgage(double interestRate, int purchasePrice, int termMonths, int downPayment, int creditScore){
@@ -108,20 +107,6 @@ public abstract class Mortgage {
         }
         return 0;
     }
-
-    //method to calculate the monthly p/i for multiple mortgages
-//    public static double totalMonthlyPayments(Mortgage[] mortgage){
-//        double total =0;
-//
-//        for (Mortgage currentMortgage : mortgage) {
-//            System.out.println(currentMortgage.calculatePI());
-//            total+=currentMortgage.calculatePI();
-//            if (currentMortgage instanceof ConventionalMortgage || currentMortgage instanceof FHAMortgage || currentMortgage instanceof VAMortgage){
-//                total+=currentMortgage.calculatePMI();
-//            }
-//        }
-//        return total;
-//    }
 
     //method to add pmi to each month
     //calls method return pmi which will determine the amount of months that will have pmi
@@ -319,10 +304,6 @@ public abstract class Mortgage {
     public void setMonthlyPayments(BigDecimal[] monthlyPayments) {
         this.monthlyPayments = monthlyPayments;
     }
-
-//    public void setPmi(double pmi) {
-//        this.pmi = pmi;
-//    }
 
     public int getCreditScore() {
         return creditScore;

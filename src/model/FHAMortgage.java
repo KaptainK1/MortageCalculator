@@ -9,42 +9,39 @@ public class FHAMortgage extends Mortgage{
         this.escrow=escrow;
     }
 
-//    @Override
-//    public void calculateAmortization() {
-//        double i;
-//
-//        BigDecimal interest;
-//        BigDecimal principal=new BigDecimal(getPurchasePrice()-getDownPayment());
-//        BigDecimal totalPrincipal=new BigDecimal(0);
-////        double monthlyPayments[] = new double[getTermMonths()];
-//        //set beginning principal to the down payment on the loan
-////        double p = super.getPurchasePrice() - super.getDownPayment() + this.calculatePMI();
-//        //convert interest rate into a percentage
-//        double r = (super.getInterestRate() / 12) / 100;
-//        //run the calculatePI method to find the monthly payment
-//        BigDecimal payment = (super.calculatePI().add((calculateMI())));
-//        //var to hold the total principal paid
-//        double totalP;
-//
-//        for (int j = 0; j < getMonthlyPayments().length; j++) {
-//
-//            interest = principal.multiply(new BigDecimal(r));
-//            interest=interest.setScale(2,BigDecimal.ROUND_FLOOR);
-//
-//            principal=(principal.subtract(payment.subtract(interest)));
-//            totalPrincipal=(totalPrincipal.add(payment.subtract(interest)));
-//
-//            principal=principal.setScale(2,BigDecimal.ROUND_FLOOR);
-//            totalPrincipal=totalPrincipal.setScale(2,BigDecimal.ROUND_FLOOR);
-//
-//            setSpecificMonth(j,(totalPrincipal));
-//
-//        }
-////        addPMI();
-//        super.setMonthlyPayments(super.getMonthlyPayments());
-//        //run the print schedule method that prints out the array
-//        printSchedule();
-//    }
+    @Override
+    public void calculateAmortization() {
+        BigDecimal interest;
+        BigDecimal principal=new BigDecimal(getPurchasePrice()-getDownPayment());
+        BigDecimal totalPrincipal=new BigDecimal(0);
+//        double monthlyPayments[] = new double[getTermMonths()];
+        //set beginning principal to the down payment on the loan
+//        double p = super.getPurchasePrice() - super.getDownPayment() + this.calculatePMI();
+        //convert interest rate into a percentage
+        double r = (super.getInterestRate() / 12) / 100;
+        //run the calculatePI method to find the monthly payment
+        BigDecimal payment = (super.calculatePI().add((calculateMI())));
+        //var to hold the total principal paid
+
+        for (int j = 0; j < getMonthlyPayments().length; j++) {
+
+            interest = principal.multiply(new BigDecimal(r));
+            interest=interest.setScale(2,BigDecimal.ROUND_FLOOR);
+
+            principal=(principal.subtract(payment.subtract(interest)));
+            totalPrincipal=(totalPrincipal.add(payment.subtract(interest)));
+
+            principal=principal.setScale(2,BigDecimal.ROUND_FLOOR);
+            totalPrincipal=totalPrincipal.setScale(2,BigDecimal.ROUND_FLOOR);
+
+            setSpecificMonth(j,(totalPrincipal));
+
+        }
+        addPMI();
+        super.setMonthlyPayments(super.getMonthlyPayments());
+        //run the print schedule method that prints out the array
+        printSchedule();
+    }
 
     @Override
     public BigDecimal calculatePMI(){
